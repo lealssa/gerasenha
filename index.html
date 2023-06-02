@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gera Senha</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-info bg-gradient">
+
+    <div class="container vh-100 d-flex flex-column justify-content-center align-items-center" x-data="geraSenha">
+
+        <div class="card" style="max-width: 780px;">
+
+            <div class="card-header text-info">
+                <small class="h4 text-center"><p class="text-center">Gerador de senhas</p></small>
+            </div>            
+
+            <div class="row g-0 align-items-center">
+
+                <div class="col-md-3">
+                    <img src="robo_gerando_senhas2.jpeg" class="img-fluid rounded-center" alt="...">
+                </div>
+
+                <div class="col-md-9">
+
+                    <div class="card-body">
+
+                        <div class="form-floating">
+                            <input type="number" class="form-control form-control-lg border border-info text-primary" id="tamanho"
+                                placeholder="Tamanho da senha" x-model="tamanho">
+                            <label for="tamanho">Tamanho</label>
+                        </div>
+        
+                        <fieldset class="my-3">
+        
+                            <div class="form-check form-switch form-check-inline">
+                                <input class="form-check-input" type="checkbox" role="switch" id="letras" x-model="letras">
+                                <label class="form-check-label" for="letras">Letras</label>
+                            </div>
+        
+                            <div class="form-check form-switch form-check-inline">
+                                <input class="form-check-input" type="checkbox" role="switch" id="numeros" x-model="numeros">
+                                <label class="form-check-label" for="numeros">Números</label>
+                            </div>
+        
+                            <div class="form-check form-switch form-check-inline">
+                                <input class="form-check-input" type="checkbox" role="switch" id="caracteresEspeciais"
+                                    x-model="caracteresEspeciais">
+                                <label class="form-check-label" for="caracteresEspeciais">Caracteres especiais</label>
+                            </div>
+        
+                        </fieldset>
+
+                        <div class="input-group input-group-lg">
+                            <input class="form-control text-center border border-info text-primary" aria-label="Senha"
+                                readonly :value="senha" x-ref="campoSenha" />
+        
+                            <button class="btn btn-outline-info" type="button" @click="copiarSenha">
+                                <i class="fa-regular fa-copy"></i>
+                            </button>
+        
+                            <button class="btn btn-outline-info" type="button" @click="senha = senhaAleatoria">
+                                <i class="fa-solid fa-arrows-rotate"></i>
+                            </button>
+                        </div>                    
+                    
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/7c8801c017.js" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.12.1/dist/cdn.min.js"></script>
+</body>
+<script>
+
+    document.addEventListener('alpine:init', () => {
+
+        Alpine.data('geraSenha', () => ({
+            senha: '',
+            tamanho: 15,
+            letras: true,
+            numeros: true,
+            caracteresEspeciais: true,
+            get senhaAleatoria() {
+                return this.gerarSenha(this.tamanho, this.letras, this.numeros, this.caracteresEspeciais)
+            },
+            init() {
+                this.senha = this.senhaAleatoria
+                this.$watch('senhaAleatoria', () => {
+                    this.senha = this.senhaAleatoria
+                })
+            },
+            copiarSenha() {
+                navigator.clipboard.writeText(this.senha)
+
+                const campoSenha = this.$refs.campoSenha
+                campoSenha.focus()
+                campoSenha.select()
+            },
+            gerarSenha(tamanho, letras, numeros, caracteresEspeciais) {
+                let caracteres = '';
+                let senha = '';
+                if (letras) {
+                    caracteres += 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                }
+                if (numeros) {
+                    caracteres += '0123456789';
+                }
+                if (caracteresEspeciais) {
+                    caracteres += '!#%^&*_+|?-=';
+                }
+                for (let i = 0; i < tamanho; i++) {
+                    senha += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
+                }
+                return senha;
+            }
+        }))
+    })
+
+</script>
+
+</html>
