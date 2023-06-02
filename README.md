@@ -3,4 +3,4 @@
 
 #### Feito com HTML + Bootstrap CSS + AlpineJS
 
-![Alt text](demo.png "Simulador de rendimento")
+![Alt text](demo.png "Gerador de senhas")
